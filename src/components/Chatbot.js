@@ -1,0 +1,232 @@
+import { color } from 'framer-motion';
+import React, { useState, useEffect } from 'react';
+import { FaRobot, FaTimes, FaPaperPlane, FaMicrophone } from 'react-icons/fa';
+// import chatBg from "../images/chatimg.avif";
+import './App.css';
+
+
+const ChatBot = () => {
+  const [showChatWindow, setShowChatWindow] = useState(false);
+  const [messages, setMessages] = useState([]);
+  const [inputMessage, setInputMessage] = useState('');
+  const [isListening, setIsListening] = useState(false);
+
+  useEffect(() => {
+    if (showChatWindow) {
+      setMessages([
+        {
+          text: "This is Persona",
+          isBot: true,
+          time: new Date().toLocaleTimeString(),
+        },
+      ]);
+    }
+  }, [showChatWindow]);
+
+  const handleSendMessage = async () => {
+    if (!inputMessage.trim()) return;
+
+    const newMessage = {
+      text: inputMessage,
+      isBot: false,
+      time: new Date().toLocaleTimeString(),
+    };
+
+    setMessages((prev) => [...prev, newMessage]);
+    setInputMessage('');
+
+    try {
+      const response = await fetch('http://localhost:5000/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ query: inputMessage }),
+      });
+
+      const data = await response.json();
+      const botReply = data.response || "I'm here to help with your query!";
+
+      setMessages((prev) => [...prev, { text: botReply, isBot: true, time: new Date().toLocaleTimeString() }]);
+
+      const speech = new SpeechSynthesisUtterance(botReply); 
+      window.speechSynthesis.speak(speech);
+    } catch (error) {
+      console.error('API Error:', error);
+      setMessages((prev) => [...prev, { text: "Sorry, I'm having trouble connecting. Please try again later.", isBot: true, time: new Date().toLocaleTimeString() }]);
+    }
+  };
+
+  const startListening = () => {
+    const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+    recognition.lang = 'en-US';
+    recognition.start();
+
+    recognition.onstart = () => setIsListening(true);
+    recognition.onend = () => setIsListening(false);
+    recognition.onresult = (event) => {
+      const transcript = event.results[0][0].transcript;
+      setInputMessage(transcript);
+      handleSendMessage(); 
+    };
+  };
+
+  return (
+    <div style={styles.chatContainer}>
+      <div style={styles.chatIcon} onClick={() => setShowChatWindow(!showChatWindow)}>
+        <span style={styles.chatMessageText}>Hi this is Persona</span>
+        {showChatWindow ? <FaTimes /> : <FaRobot />}
+      </div>
+   
+      
+
+      {showChatWindow && (
+        <div style={styles.chatWindow}>
+          <div style={styles.chatHeader}>
+            <span style={{ marginLeft: 20 }}>
+              Allen <span>Persona</span>
+            </span>
+          </div>
+          
+
+          <div style={styles.messageContainer}>
+            {messages.map((msg, index) => (
+              <div
+                key={index}
+                style={{
+                  ...styles.messageBubble,
+                  ...(msg.isBot ? styles.botMessage : styles.userMessage),
+                }}
+              >
+                {msg.isBot && <FaRobot style={styles.botIcon} />}
+                <div>
+                  {/* <p style={styles.messageText}>{msg.text}</p>
+                  <p style={styles.timestamp}>{msg.time}</p> */}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div style={styles.inputContainer}>
+            <FaMicrophone style={styles.micIcon} onClick={startListening} /> {/* माइक्रोफोन बटन जो वॉयस इनपुट लेगा */}
+            <input
+              type="text"
+              placeholder="Write a message"
+              value={inputMessage}
+              onChange={(e) => setInputMessage(e.target.value)}
+              onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+              style={styles.inputField}
+            />
+            <FaPaperPlane style={styles.sendIcon} onClick={handleSendMessage} />
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+const styles = {
+  chatContainer: {
+    position: 'fixed',
+    bottom: '50px',
+    right: '30px',
+    zIndex: 1000,
+  },
+  chatIcon: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: '10px',
+    background: 'linear-gradient(135deg, rgba(0,0,0,0.8), rgba(0,0,255,0.6))',
+    borderRadius: '20px 0 20px 20px',
+    cursor: 'pointer',
+    color: 'white',
+    animation: 'bounce 2s infinite ease-in-out',
+  },
+  chatMessageText: {
+    fontWeight: 'bold',
+    marginRight: '10px',
+  },
+  chatWindow: {
+    width: '400px',
+    height: '500px',
+    // backgroundImage: `url(${chatBg})`,
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    borderRadius: '20px 20px 0 20px',
+    boxShadow: '0 2px 10px rgba(0,0,0,0.2)',
+    position: 'fixed',
+    bottom: '120px',
+    right: '30px',
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  chatHeader: {
+    background: 'linear-gradient(135deg, rgba(0,0,0,0.8), rgba(0,0,255,0.6))',
+    padding: '10px',
+    color: 'white',
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    borderRadius: '10px 10px 0 0',
+  },
+  messageContainer: {
+    flex: 1,
+    padding: '10px',
+    overflowY: 'auto',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '10px',
+  },
+  messageBubble: {
+    maxWidth: '70%',
+    padding: '12px 15px',
+    borderRadius: '20px',
+    display: 'flex',
+    alignItems: 'center',
+  },
+  botMessage: {
+    background: '#d1c4e9',
+    borderRadius: '20px 20px 20px 0',
+    alignSelf: 'flex-start',
+    color:'black',
+  },
+  userMessage: {
+    background: '#e0f7fa',
+    color:'black',
+    borderRadius: '20px 20px 0 20px',
+    alignSelf: 'flex-end',
+  },
+  timestamp: {
+    fontSize: '12px',
+    color: '#666',
+    textAlign: 'right',
+    marginTop: '4px',
+  },
+  inputContainer: {
+    padding: '10px',
+    background: 'white',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '10px',
+  },
+  inputField: {
+    flex: 1,
+    padding: '8px',
+    borderRadius: '50px',
+    border: '1px solid #ddd',
+    outline: 'none',
+  },
+  micIcon: {
+    fontSize: '24px',
+    cursor: 'pointer',
+    color: '#ff5733',
+  },
+  sendIcon: {
+    fontSize: '24px',
+    cursor: 'pointer',
+    color: '#255cdc',
+  },
+};
+
+export default ChatBot;
