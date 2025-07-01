@@ -4,6 +4,9 @@ import { FaRobot, FaTimes, FaPaperPlane, FaMicrophone } from 'react-icons/fa';
 // import chatBg from "../images/chatimg.avif";
 import './App.css';
 
+import Lottie from "lottie-react";
+import aiAnimation from "../assets/ai.json";
+
 
 const ChatBot = () => {
   const [showChatWindow, setShowChatWindow] = useState(false);
@@ -71,12 +74,20 @@ const ChatBot = () => {
     };
   };
 
+
   return (
     <div style={styles.chatContainer}>
-      <div style={styles.chatIcon} onClick={() => setShowChatWindow(!showChatWindow)}>
-        <span style={styles.chatMessageText}>Hi this is Persona</span>
-        {showChatWindow ? <FaTimes /> : <FaRobot />}
-      </div>
+      <div
+      style={styles.chatIcon}
+      onClick={() => setShowChatWindow(!showChatWindow)}
+    >
+      <Lottie
+        animationData={aiAnimation}
+        loop
+        autoplay
+        style={{ width: "100%", height: "100%" }}
+      />
+    </div>
    
       
 
@@ -133,15 +144,20 @@ const styles = {
     zIndex: 1000,
   },
   chatIcon: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: '10px',
-    background: 'linear-gradient(135deg, rgba(0,0,0,0.8), rgba(0,0,255,0.6))',
-    borderRadius: '20px 0 20px 20px',
-    cursor: 'pointer',
-    color: 'white',
-    animation: 'bounce 2s infinite ease-in-out',
+       position: "fixed",
+      bottom: "20px",
+      right: "20px",
+      width: "70px",
+      height: "70px",
+      borderRadius: "50%",            // ✅ Make it circular
+      backgroundColor: "#fff",        // ✅ White background
+      display: "flex",                // ✅ Center animation
+      alignItems: "center",
+      justifyContent: "center",
+      boxShadow: "0 4px 10px rgba(0, 0, 0, 0.2)", // ✅ Soft shadow
+      cursor: "pointer",
+      transition: "transform 0.2s ease-in-out",  // ✅ Smooth hover
+      zIndex: 9999,
   },
   chatMessageText: {
     fontWeight: 'bold',

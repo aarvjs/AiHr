@@ -1,0 +1,158 @@
+{
+  "web development": {
+    "synonyms": ["frontend", "html", "css", "javascript", "website", "developer"],
+    "category": "technical",
+    "questions": [
+      "What do you enjoy most about web development?",
+      "Which frontend frameworks are you familiar with?",
+      "How do you ensure cross-browser compatibility?",
+      "What’s the importance of responsive design?",
+      "Tell me about your most recent web project."
+    ]
+  },
+  "react": {
+    "synonyms": ["useState", "useEffect", "jsx", "component", "props"],
+    "category": "technical",
+    "questions": [
+      "What is the purpose of useState in React?",
+      "Explain how useEffect works.",
+      "What is the virtual DOM?",
+      "How are props different from state?",
+      "How do you handle forms in React?"
+    ]
+  },
+  "sql": {
+    "synonyms": ["database", "mysql", "query", "join", "table"],
+    "category": "technical",
+    "questions": [
+      "Can you explain what a primary key is?",
+      "What is normalization in SQL?",
+      "What’s the difference between SQL and NoSQL?",
+      "How do you fetch data from multiple tables?",
+      "Have you used joins in SQL queries?"
+    ]
+  },
+  "projects": {
+    "synonyms": ["built", "created", "developed", "application", "website", "app", "project"],
+    "category": "project",
+    "questions": [
+      "Tell me about your favorite project.",
+      "What challenges did you face during a recent project?",
+      "How did you collaborate with your team in your project?",
+      "Which technologies did you use in your recent project?",
+      "What role did you play in your project team?",
+      "How do you plan and execute a project?",
+      "What tech stack did you use?"
+    ]
+  },
+  "hobbies": {
+    "synonyms": ["music", "travel", "reading", "cricket", "painting", "hobby"],
+    "category": "personal",
+    "questions": [
+      "How do your hobbies influence your work style?",
+      "Do your hobbies help in managing stress?",
+      "Have your hobbies contributed to any project?",
+      "What do you enjoy doing in your free time?",
+      "Do you prefer working alone or in a team?"
+    ]
+  },
+  "communication": {
+    "synonyms": ["teamwork", "presentation", "public speaking", "soft skill", "talk", "language"],
+    "category": "behavioral",
+    "questions": [
+      "How do you communicate effectively in a team?",
+      "Tell me about a time you resolved a team conflict.",
+      "How do you handle feedback?",
+      "Describe a situation where you had to present your work.",
+      "What makes a good team leader?"
+    ]
+  },
+  "time management": {
+    "synonyms": ["schedule", "deadline", "planning", "organize", "multitask"],
+    "category": "behavioral",
+    "questions": [
+      "How do you manage tight deadlines?",
+      "Give an example of a time you multitasked successfully.",
+      "How do you prioritize tasks?",
+      "Describe your daily work routine.",
+      "What tools do you use to stay organized?"
+    ]
+  },
+  "python": {
+    "synonyms": ["python", "flask", "django", "scripting"],
+    "category": "technical",
+    "questions": [
+      "Why do you like working with Python?",
+      "Have you built any apps using Django or Flask?",
+      "What is the difference between list and tuple?",
+      "Explain the concept of decorators.",
+      "How do you handle exceptions in Python?"
+    ]
+  },
+  "android": {
+    "synonyms": ["android", "java", "kotlin", "apk", "xml"],
+    "category": "technical",
+    "questions": [
+      "Have you published any Android apps?",
+      "What is an Activity in Android?",
+      "How does the Android lifecycle work?",
+      "How do you manage layouts and UI in Android?",
+      "Which tools do you use for Android development?"
+    ]
+  },
+  "achievements": {
+    "synonyms": ["winner", "hackathon", "award", "achievement", "competition"],
+    "category": "achievement",
+    "questions": [
+      "Tell me about a competition you won.",
+      "Have you received any awards or recognitions?",
+      "How did you feel after winning an event?",
+      "What did you learn from your recent achievements?",
+      "How do you prepare for tech competitions?"
+    ]
+  },
+  "coding": {
+    "synonyms": ["leetcode", "problem solving", "cp", "dsa", "algorithms"],
+    "category": "technical",
+    "questions": [
+      "How do you approach a difficult coding problem?",
+      "Do you participate in coding contests?",
+      "Which platforms do you practice coding on?",
+      "What’s your favorite algorithm and why?",
+      "Have you ever used DSA in a real-world project?"
+    ]
+  },
+  "internship": {
+    "synonyms": ["intern", "internship", "training", "stipend", "company"],
+    "category": "experience",
+    "questions": [
+      "Tell me about your internship experience.",
+      "What did you learn during your internship?",
+      "How did you apply your skills in the company?",
+      "What feedback did you receive from your mentor?",
+      "Would you like to work there full-time?"
+    ]
+  },
+  "leadership": {
+    "synonyms": ["lead", "head", "captain", "team lead", "management"],
+    "category": "behavioral",
+    "questions": [
+      "Tell me about a time you led a team.",
+      "How do you handle responsibility?",
+      "What qualities make a good leader?",
+      "Have you ever mentored someone?",
+      "How do you manage conflict in a group?"
+    ]
+  },
+  "non-tech": {
+    "synonyms": ["communication", "soft skills", "non tech", "language"],
+    "category": "behavioral",
+    "questions": [
+      "How do you handle pressure?",
+      "Why do you want this role?",
+      "Tell me about yourself.",
+      "What are your goals for the next 2 years?",
+      "Why should we hire you?"
+    ]
+  }
+}

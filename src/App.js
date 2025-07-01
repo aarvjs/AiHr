@@ -22,6 +22,8 @@ import TeacherSendMessages from './components/TeacherSendMessage';
 
 import AdminLayout from './Layouts/AdminLayout';
 import AdminStudent from './components/AdminStudent';
+import PersonaAi from './pages/PersonaAi';
+import AtsScore from './pages/AtsScore';
 
 function App() {
   return (
@@ -46,7 +48,9 @@ function App() {
         >
           <Route index element={<StudentDashboard />} />
           <Route path="student-message" element={<StudentMessage />} />
-          {/* <Route path="profile" element={<StudentProfile />} />
+          <Route path="persona-ai" element={<PersonaAi/>}/>
+          <Route path="ats-score" element={<AtsScore/> } />
+            {/* <Route path="profile" element={<StudentProfile />} />
   <Route path="courses" element={<StudentCourses />} />
   <Route path="results" element={<StudentResults />} /> */}
         </Route>

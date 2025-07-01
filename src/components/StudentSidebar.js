@@ -7,6 +7,7 @@ import {
   FaBook,
   FaChartBar,
   FaSignOutAlt,
+FaVine,
 } from 'react-icons/fa';
 import logo from '../assets/logo.png';
 
@@ -67,6 +68,12 @@ const StudentSidebar = () => {
           </Link>
           <Link to="/student-dashboard/student-message" style={linkStyle('/student-message')}>
             <FaEnvelope /> Messages
+          </Link>
+           <Link to="/student-dashboard/persona-ai" style={linkStyle('/persona-ai')}>
+            <FaVine /> Persona Ai
+          </Link>
+           <Link to="/student-dashboard/ats-score" style={linkStyle('/ats-score')}>
+            <FaBook /> Ats Score
           </Link>
           <Link to="/student-dashboard/courses" style={linkStyle('/courses')}>
             <FaBook /> Courses

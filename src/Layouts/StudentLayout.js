@@ -8,10 +8,11 @@ const StudentLayout = () => {
       <StudentSidebar />
       <div style={{
         marginLeft: '250px',
-        padding: '30px',
+        // padding: '30px',
         minHeight: '100vh',
         width: '100%',
         background: '#f9f9f9',
+        overflowX:'hidden',
       }}>
         <Outlet />
       </div>
