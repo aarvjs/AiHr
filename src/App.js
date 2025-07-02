@@ -14,7 +14,7 @@ import AdminDashboard from "./pages/AdminDashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
 import StudentLayout from "./Layouts/StudentLayout";
 import StudentMessage from "./pages/StudentMessage";
-
+import VedioRoom from '../src/ClassRoomVedio/VideoRoom';
 
 
 import TeacherLayout from './Layouts/TeacherLayout';
@@ -22,8 +22,15 @@ import TeacherSendMessages from './components/TeacherSendMessage';
 
 import AdminLayout from './Layouts/AdminLayout';
 import AdminStudent from './components/AdminStudent';
+import AdminSendMessages from './child_components/AdminSendMessages';
+
+
 import PersonaAi from './pages/PersonaAi';
 import AtsScore from './pages/AtsScore';
+import Modal from 'react-modal';
+
+Modal.setAppElement('#root');
+
 
 function App() {
   return (
@@ -50,12 +57,11 @@ function App() {
           <Route path="student-message" element={<StudentMessage />} />
           <Route path="persona-ai" element={<PersonaAi/>}/>
           <Route path="ats-score" element={<AtsScore/> } />
-            {/* <Route path="profile" element={<StudentProfile />} />
-  <Route path="courses" element={<StudentCourses />} />
-  <Route path="results" element={<StudentResults />} /> */}
+         <Route path="room/:roomId" element={<VedioRoom />} />
+
         </Route>
 
-        {/* teavjer dahsbaord hereeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee  */}
+        {/* teaachere dahsbaord hereeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee  */}
         <Route
         path="/teacher-dashboard"
         element={
@@ -67,6 +73,8 @@ function App() {
         {/* ✅ Ye nested route hai, Outlet ke through dikhega */}
         <Route index element={<TeacherDashboard />} />
         <Route path="teacher-send-message" element={ <TeacherSendMessages/>}/>
+        <Route path="room/:roomId" element={<VedioRoom />} />
+
 
       </Route>
 
@@ -84,6 +92,7 @@ function App() {
 >
   <Route index element={<AdminDashboard />} />
   <Route path="admin-student" element={<AdminStudent />} /> 
+  <Route path="admin-send-messages" element={<AdminSendMessages/>}/>
 </Route>
       </Routes>
     </Router>

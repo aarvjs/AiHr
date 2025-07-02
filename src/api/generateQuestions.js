@@ -7,7 +7,7 @@ import questionBank from "../api/backup_questions.json";
 import { generateFeedback } from "../api/generateFeedback";
 import { getTotalFillerWords } from "../api/getTotalFillerWords";
 
-
+const genAI = new GoogleGenerativeAI("AIzaSyC5ohX7MWiWeDluJv1xBXTG3SPltgP_fek");
 const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
 const QuestionFlow = ({ resumeText, resumeId }) => {

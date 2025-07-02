@@ -1,28 +1,24 @@
-const express = require('express');
-const cors = require('cors');
-require("dotenv").config();
+const express = require("express");
+const http = require("http");
+const { Server } = require("socket.io");
+
 const app = express();
-const PORT = process.env.PORT || 5000;
-const { GoogleGenerativeAI } = require('@google/generative-ai');
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: { origin: "*" }
+});
 
+io.on("connection", (socket) => {
+  socket.on("join-room", (roomId, userId) => {
+    socket.join(roomId);
+    socket.to(roomId).emit("user-connected", userId);
 
-// Enable CORS for your React app===================================
-app.use(cors({
-  origin: 'http://localhost:3000',
-  credentials: true
-}));
+    socket.on("disconnect", () => {
+      socket.to(roomId).emit("user-disconnected", userId);
+    });
+  });
+});
 
-app.use(express.json());
-
-
-const genAI = new GoogleGenerativeAI('AIzaSyDBcwuUHG2k3CJo4F5krEy2qCLvQRx1Cj4');
-const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
-
-
-
-// end hereeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
-
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-//   console.log(`Mock ATS scoring API available at http://localhost:${PORT}/api/analyze-resume);
+server.listen(5000, () => {
+  console.log("Socket server started on port 5000");
 });

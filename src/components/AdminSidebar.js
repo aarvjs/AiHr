@@ -87,7 +87,7 @@ const AdminSidebar = () => {
           {navLink('/admin-dashboard', <FaTachometerAlt />, 'Dashboard')}
           {navLink('/admin-dashboard/admin-student', <FaUserGraduate />, 'Students')}
           {navLink('/admin-dashboard/manage-teachers', <FaChalkboardTeacher />, 'Teachers')}
-          {navLink('/admin-dashboard/messages', <FaEnvelope />, 'Messages')}
+          {navLink('/admin-dashboard/admin-send-messages', <FaEnvelope />, 'Messages')}
           {navLink('/admin-dashboard/ai', <FaEnvelope />, 'Persona AI')}
           {navLink('/', <FaSignOutAlt />, 'Logout')}
         </nav>

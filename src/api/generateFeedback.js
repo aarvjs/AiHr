@@ -3,7 +3,7 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { supabase } from "../supabaseClient";
 
-
+const genAI = new GoogleGenerativeAI("AIzaSyC5ohX7MWiWeDluJv1xBXTG3SPltgP_fek");
 const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
 export const generateFeedback = async (resumeId) => {
@@ -34,23 +34,32 @@ export const generateFeedback = async (resumeId) => {
   // ✅ Optimized prompt
 // ✅ Optimized prompt
 const prompt = `
-You are an experienced HR reviewer. Analyze the candidate's interview responses.
+You are a professional HR interviewer. Below are the candidate's responses from a mock interview.
 
 Details:
 - Total filler words used: ${totalFillerWords}
-- Each answer includes individual filler word count.
+- Each response includes filler word count.
 
-Instructions:
-1. Give a 2-3 line summary about their confidence and communication skills.
-2. Comment on filler word usage — mention if it's too high or acceptable.
-3. Give ONE tip to reduce filler words.
-4. Suggest TWO short improvements (1 line each).
+Please provide the following structured feedback:
 
-Be crisp, helpful, and HR-style.
+1. **Overall Communication & Confidence** (2–3 lines):
+   Analyze how the candidate sounded overall — tone, clarity, and confidence.
+
+2. **Filler Word Usage**:
+   Mention if the usage is too high, moderate, or acceptable. Give ONE helpful tip to reduce filler words.
+
+3. **Per Question Analysis**:
+   For each question, briefly mention how well the candidate answered it (e.g., good structure, off-topic, lacked clarity, etc.).
+
+4. **Improvement Suggestions**:
+   - Suggest TWO short and practical ways the candidate can improve in future interviews (1 line each).
+
+Keep your tone professional and feedback crisp.
 
 Candidate's Responses:
 ${inputText}
 `;
+
 
 
   // ✅ Get feedback from Gemini
