@@ -4,6 +4,8 @@ import { v4 as uuidv4 } from "uuid";
 import { createRoom } from "../supabase/RoomService";
 import { useNavigate } from "react-router-dom";
 import { nanoid } from 'nanoid';
+import  {supabase}  from '../supabaseClient';
+
 
 const AdminChatPage = ({ user }) => {
   const [message, setMessage] = useState('');
@@ -12,6 +14,10 @@ const AdminChatPage = ({ user }) => {
   const [hoveredIndex, setHoveredIndex] = useState(null);
   const [chatType, setChatType] = useState('Student Classroom');
   const dropdownRef = useRef(null);
+
+  const [assignedSection, setAssignedSection] = useState('');
+const [selectedStudent, setSelectedStudent] = useState(null);
+
 
   // supabse me key store and vedio call start hereeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee 
   const navigate = useNavigate();
@@ -33,14 +39,59 @@ const AdminChatPage = ({ user }) => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const handleSend = () => {
-    if (message.trim() === '') return;
-    setChatHistory([
-      ...chatHistory,
-      { text: message, time: new Date().toLocaleTimeString() },
-    ]);
-    setMessage('');
-  };
+const handleSend = async () => {
+  if (!message.trim()) return;
+
+  const { data: userData } = await supabase.auth.getUser();
+  const from_id = userData?.user?.id;
+
+  if (!from_id || !assignedSection) {
+    alert("❗ Unable to send message. Please re-login.");
+    return;
+  }
+
+  // Fetch students
+  const { data: students, error } = await supabase
+    .from("users")
+    .select("id, name")
+    .eq("section", assignedSection);
+
+  if (error || !students || students.length === 0) {
+    alert("❌ No students found for your section.");
+    return;
+  }
+
+  // Get teacher name
+  const { data: profileData } = await supabase
+    .from("users")
+    .select("name")
+    .eq("id", from_id)
+    .single();
+
+  const teacherName = profileData?.name || "Teacher";
+
+  const messages = students.map((student) => ({
+    from_id,
+    to_id: student.id,
+    section: assignedSection,
+    text: message,
+    sender_name: teacherName,
+    timestamp: new Date().toISOString()
+  }));
+
+  console.log("Sending messages:", messages); // ✅ Debug log
+
+  const { error: insertError } = await supabase.from("chat_messages").insert(messages);
+
+  if (insertError) {
+    console.error("Message send failed", insertError); // ✅ This shows detailed reason
+    alert("❌ Failed to send messages.");
+  } else {
+    setChatHistory([...chatHistory, ...messages]);
+    setMessage("");
+  }
+};
+
 
   const handleDelete = (index) => {
     const updated = [...chatHistory];
@@ -124,6 +175,8 @@ const AdminChatPage = ({ user }) => {
           }}>
             <FaVideo color="#00bfff" size={18} />
           </button>
+
+          {/* vedio call end hereeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee . */}
         </div>
       </div>
 

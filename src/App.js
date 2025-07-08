@@ -19,6 +19,7 @@ import VedioRoom from '../src/ClassRoomVedio/VideoRoom';
 
 import TeacherLayout from './Layouts/TeacherLayout';
 import TeacherSendMessages from './components/TeacherSendMessage';
+import TeacherAllStudent from './child_components/TeacherAllStudent';
 
 import AdminLayout from './Layouts/AdminLayout';
 import AdminStudent from './components/AdminStudent';
@@ -28,6 +29,9 @@ import AdminSendMessages from './child_components/AdminSendMessages';
 import PersonaAi from './pages/PersonaAi';
 import AtsScore from './pages/AtsScore';
 import Modal from 'react-modal';
+import TeacherPersona from './pages/PersonaAi';
+import StudentQRScanner from './child_components/StudentQRScanner';
+import ResumeGenerato from './pages/ResumeGenerato';
 
 Modal.setAppElement('#root');
 
@@ -41,9 +45,10 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/career" element={<Career />} />
+          <Route path="/student-qr-scanner" element={<StudentQRScanner />} />
         </Route>
 
-        {/* ✅ Protected Routes */}
+       
         {/* studnet dahbaord hereeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee  */}
         <Route
           path="/student-dashboard"
@@ -58,6 +63,8 @@ function App() {
           <Route path="persona-ai" element={<PersonaAi/>}/>
           <Route path="ats-score" element={<AtsScore/> } />
          <Route path="room/:roomId" element={<VedioRoom />} />
+         <Route path="resume-generato" element={<ResumeGenerato/>}/>
+         {/* <Route path="student-qr-scanner" element={<StudentQRScanner/>}/> */}
 
         </Route>
 
@@ -74,7 +81,8 @@ function App() {
         <Route index element={<TeacherDashboard />} />
         <Route path="teacher-send-message" element={ <TeacherSendMessages/>}/>
         <Route path="room/:roomId" element={<VedioRoom />} />
-
+        <Route path="teacher-all-student" element={<TeacherAllStudent/>}/>
+        <Route path="persona-ai" element={<TeacherPersona/>}/>
 
       </Route>
 

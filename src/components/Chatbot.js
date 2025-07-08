@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { FaRobot, FaTimes, FaPaperPlane, FaMicrophone } from 'react-icons/fa';
 // import chatBg from "../images/chatimg.avif";
 import './App.css';
+import { GoogleGenerativeAI } from '@google/generative-ai';
 
 import Lottie from "lottie-react";
 import aiAnimation from "../assets/ai.json";
@@ -13,6 +14,8 @@ const ChatBot = () => {
   const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState('');
   const [isListening, setIsListening] = useState(false);
+  const genAI = new GoogleGenerativeAI("AIzaSyC5ohX7MWiWeDluJv1xBXTG3SPltgP_fek");
+const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
   useEffect(() => {
     if (showChatWindow) {
@@ -26,40 +29,54 @@ const ChatBot = () => {
     }
   }, [showChatWindow]);
 
-  const handleSendMessage = async () => {
-    if (!inputMessage.trim()) return;
+ const handleSendMessage = async () => {
+  if (!inputMessage.trim()) return;
 
-    const newMessage = {
-      text: inputMessage,
-      isBot: false,
-      time: new Date().toLocaleTimeString(),
-    };
-
-    setMessages((prev) => [...prev, newMessage]);
-    setInputMessage('');
-
-    try {
-      const response = await fetch('http://localhost:5000/chat', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ query: inputMessage }),
-      });
-
-      const data = await response.json();
-      const botReply = data.response || "I'm here to help with your query!";
-
-      setMessages((prev) => [...prev, { text: botReply, isBot: true, time: new Date().toLocaleTimeString() }]);
-
-      const speech = new SpeechSynthesisUtterance(botReply); 
-      window.speechSynthesis.speak(speech);
-    } catch (error) {
-      console.error('API Error:', error);
-      setMessages((prev) => [...prev, { text: "Sorry, I'm having trouble connecting. Please try again later.", isBot: true, time: new Date().toLocaleTimeString() }]);
-    }
+  const newMessage = {
+    text: inputMessage,
+    isBot: false,
+    time: new Date().toLocaleTimeString(),
   };
 
+  setMessages((prev) => [...prev, newMessage]);
+  setInputMessage('');
+
+  try {
+    const chat = await model.startChat({
+      history: [],
+      generationConfig: {
+        maxOutputTokens: 100,
+      },
+    });
+
+    const result = await chat.sendMessage(inputMessage);
+    const response = await result.response.text();
+
+    const botReply = response || "I'm here to help with your query!";
+    setMessages((prev) => [
+      ...prev,
+      {
+        text: botReply,
+        isBot: true,
+        time: new Date().toLocaleTimeString(),
+      },
+    ]);
+
+    // 🎤 Speak the response
+    const speech = new SpeechSynthesisUtterance(botReply);
+    window.speechSynthesis.speak(speech);
+  } catch (error) {
+    console.error("Gemini API Error:", error);
+    setMessages((prev) => [
+      ...prev,
+      {
+        text: "Sorry, something went wrong while processing your request.",
+        isBot: true,
+        time: new Date().toLocaleTimeString(),
+      },
+    ]);
+  }
+};
   const startListening = () => {
     const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
     recognition.lang = 'en-US';
@@ -111,8 +128,8 @@ const ChatBot = () => {
               >
                 {msg.isBot && <FaRobot style={styles.botIcon} />}
                 <div>
-                  {/* <p style={styles.messageText}>{msg.text}</p>
-                  <p style={styles.timestamp}>{msg.time}</p> */}
+                  <p style={styles.messageText}>{msg.text}</p>
+                  <p style={styles.timestamp}>{msg.time}</p>
                 </div>
               </div>
             ))}
@@ -192,32 +209,40 @@ const styles = {
     overflowY: 'auto',
     display: 'flex',
     flexDirection: 'column',
-    gap: '10px',
+    // gap: '8px', 
+    backgroundColor: '#f0f2f5', // WhatsApp-like background
   },
+
   messageBubble: {
-    maxWidth: '70%',
-    padding: '12px 15px',
-    borderRadius: '20px',
+    maxWidth: '75%',
+    padding: '3px 14px', // ✅ Compact padding like WhatsApp
+    borderRadius: '14px',
     display: 'flex',
-    alignItems: 'center',
+    flexDirection: 'column',
+    fontSize: '14px', // ✅ Slightly smaller text
+    lineHeight: '1.4',
+    wordBreak: 'break-word',
   },
+
   botMessage: {
-    background: '#d1c4e9',
-    borderRadius: '20px 20px 20px 0',
+    background: '#ffffff', // WhatsApp light bot color
+    borderRadius: '14px 14px 14px 4px',
     alignSelf: 'flex-start',
-    color:'black',
+    color: '#000',
   },
+
   userMessage: {
-    background: '#e0f7fa',
-    color:'black',
-    borderRadius: '20px 20px 0 20px',
+    background: '#dcf8c6', // WhatsApp green bubble
+    borderRadius: '14px 14px 4px 14px',
     alignSelf: 'flex-end',
+    color: '#000',
   },
+
   timestamp: {
-    fontSize: '12px',
-    color: '#666',
-    textAlign: 'right',
-    marginTop: '4px',
+    fontSize: '11px',
+    color: '#888',
+    alignSelf: 'flex-end',
+    marginTop: '2px',
   },
   inputContainer: {
     padding: '10px',
